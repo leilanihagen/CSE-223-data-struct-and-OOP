@@ -1,48 +1,50 @@
-// TO DO: Write fraction normalizing/reducing method to call from
-// the setters and constructors.
+import java.lang.Double;
 
+/**
+* Fraction class that creates an interface for creating and using Fraction objects of the form
+* (int numerator)/(int denominator). The class provides public methods for accessing the numerator
+* and denominator separately, for representing the fraction as a String and as a double,
+* and for adding, subtracting, multiplying, and dividing by other Fraction objects.
+*
+* @author Leilani Hagen
+* @version 1.0
+* @since 2018-04-19
+*/
 public class Fraction {
 
   // Member fields:
-  private static int serialCounter = 1;
-  private int serialNo;
   private int num;
   private int denom;
 
   // Constructor 1:
   public Fraction(int num, int denom) {
-    this.serialNo = serialCounter++;
+    /* Main constructor for building new Fractions. Calls the condition() on fractions at
+       construction. */
+
     this.num = num;
     this.denom = denom;
-//    System.out.println("Fraction("+num+", "+denom+")="+this.serialNo);
     this.condition();
   }
 
   // Constructer 2:
   public Fraction(int num) {
+    /* Constructs a fraction out of whole number when only a numerator is provided. */
+
     this.num = num;
     this.denom = 1;
   }
 
   // Getters:
-  public int getNum() {
+  public int getNum(int num) {
     return this.num;
   }
-  public int getDenom() {
+  public int getDenom(int denom) {
     return this.denom;
   }
 
-  // Setters:
-  public void setNum(int num) {
-    this.num = num;
-    this.condition();
-  }
-  public void setDenom(int denom) {
-    this.denom = denom;
-    this.condition();
-  }
-
   public String toString() {
+    /* Returns a String representation of the instance Fraction. */
+
     if (this.denom == 0){ // Flag
       return "NaN";
     }
@@ -52,7 +54,18 @@ public class Fraction {
     return (Integer.toString(this.num) + "/" + Integer.toString(this.denom));
   }
 
+  public double toDouble() {
+    /* Converts the instance Fraction to double. */
+
+    if (this.denom == 0){
+      return Double.NaN;
+    }
+    return ((double)this.num/this.denom);
+  }
+
   public Fraction add(Fraction addend) {
+    /* Computes the Fraction sum of the instance Fraction plus the addend Fraction. */
+
     if (this.denom == addend.denom){ // Already have common denominator.
       return (new Fraction(this.num + addend.num, this.denom)); // Calling the constructor again
     } // Else:                                                // ensures fraction gets reconditioned.
@@ -63,29 +76,38 @@ public class Fraction {
   }
 
   public Fraction sub(Fraction subtrahend) {
+    /* Computes the Fraction difference of the instance Fraction minus the subtrahend Fraction. */
+
     if (this.denom == subtrahend.denom){
-      return (new Fraction(this.num - addend.num, this.denom));
+      return (new Fraction(this.num - subtrahend.num, this.denom));
     } // Else:
-    int thisScaledNum = this.num * addend.denom;
-    int subtrahendScaledNum = addend.num * this.denom;
+    int thisScaledNum = this.num * subtrahend.denom;
+    int subtrahendScaledNum = subtrahend.num * this.denom;
     int commonDenom = this.denom * subtrahend.denom;
     return (new Fraction(thisScaledNum - subtrahendScaledNum, commonDenom));
   }
 
   public Fraction mul(Fraction multiplier) {
+    /* Computes the Fraction product of the instance Fraction times the multiplier Fraction. */
+
     return (new Fraction(this.num * multiplier.num, this.denom * multiplier.denom));
   }
 
   public Fraction div(Fraction divisor) {
-    return (new Fraction(this.num * divisor.denom, this.denom * multiplier.num));
+    /* Computes the Fraction quotient of the instance Fraction divided by the divisor Fraction. */
+
+    if (divisor.num == 0){
+      return (new Fraction(1, 0));
+    }
+    return (new Fraction(this.num * divisor.denom, this.denom * divisor.num));
   }
 
-  public void condition() {
-    // Flag divisions by 0 as undefined:
-    if (this.denom == 0){
-    }
+  private void condition() {
+    /* Fraction "conditioning" method that reduces fractions to simplest form (eliminates common
+       factors from the numerator and denominator) and reformats negative fractions. */
+
     // Reduce 0/num to 0/1:
-    else if (this.num == 0){ // Do not modify denom. if it also ==0
+    if (this.num == 0 && this.denom != 0){ // Do not modify denom. if it also ==0
       this.denom = 1;
     }
     // Keep negative sign placement consistent:
@@ -99,43 +121,10 @@ public class Fraction {
     this.denom = this.denom/gcf;
   }
 
-/** VERSION 1**/
-//  public int gcf() { // ADD CACHEING, CLEAN UP
-//    // Base cases:
-//    if (this.num == 0){
-//      return this.denom;
-//    }
-//    if (this.denom == 0){
-//      return this.num;
-//    }
-//
-//    // Internally convert negatives to positives: // FIX TO WORK WITH "NEW WAY"
-//    
-//
-//    int posNum, posDenom; // Use local variations of member fields...
-//    if (this.num < 0){
-//      posNum = -this.num;
-//    } else posNum = this.num;
-//    if (this.denom < 0){
-//      posDenom = -this.denom;
-//    } else posDenom = this.denom;
-//
-//    // Recursive step:
-//    int remainder = posNum % posDenom;
-//
-//    //DEBUGGING//
-//    //System.out.println("num="+this.num+" denom="+this.denom+" rem.="+remainder+" serialNo="+this.serialNo);
-//
-//    //OLD WAY: Create a new fraction and recursively call gcf on new instance (buggy):
-//    //Fraction intermediate = new Fraction(posDenom, remainder); // CONDENSE
-//    //NEW WAY: Intermediately undate -this- instance and call again... (no call to constructor,
-//    // should eliminate bug):
-//    this.num = this.denom; // Update values according to Euclid's Algorithm so that next recursive
-//    this.denom = remainder; // call brings us closer to the solution...
-//    return (this.gcf());
-//  }
-/** VERSION 2**/
-  private static int gcf(int a, int b) { // Gen. purpose gcf() method implementing Euclid's Algorithm. Static?
+  private static int gcf(int a, int b) {
+    /* General purpose gcf method which takes two input values and finds their greatest common
+       factor. Recursively implements Euclid's Algorithm. */
+
     // Base cases:
     if (a == 0){
       return b;
