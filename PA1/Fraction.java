@@ -4,14 +4,17 @@
 public class Fraction {
 
   // Member fields:
+  private static int serialCounter = 1;
+  private int serialNo;
   private int num;
   private int denom;
-  private boolean undefined = false;
 
   // Constructor 1:
   public Fraction(int num, int denom) {
+    this.serialNo = serialCounter++;
     this.num = num;
     this.denom = denom;
+    System.out.println("Fraction("+num+", "+denom+")="+this.serialNo);
     this.condition();
   }
 
@@ -38,14 +41,13 @@ public class Fraction {
   }
 
   public String toString() {
-    this.condition();
     if (this.undefined == true){
       return "NaN";
     }
     if (this.denom == 1){
       return Integer.toString(this.num);
     }
-    else return (Integer.toString(this.num) + "/" + Integer.toString(this.denom));
+    return (Integer.toString(this.num) + "/" + Integer.toString(this.denom));
   }
 
 //  public Fraction add(Fraction addend) {
@@ -60,10 +62,9 @@ public class Fraction {
 //  public Fraction div(Fraction divisor) {
 //  }
 
-  private void condition() {
+  public void condition() {
     // Flag divisions by 0 as undefined:
     if (this.denom == 0){
-      this.undefined = true;
     }
     // Reduce 0/num to 0/1:
     else if (this.num == 0){ // Do not modify denom. if it also ==0
@@ -75,14 +76,12 @@ public class Fraction {
       this.denom = -this.denom;
     }
     // Reduce:
-    if (this.undefined == false && this.num != 0){
-      int gcf = gcf();
-      this.num = this.num/gcf;
-      this.denom = this.denom/gcf;
-    }
+    int gcf = gcf();
+    this.num = this.num/gcf;
+    this.denom = this.denom/gcf;
   }
 
-  public int gcf() { // ADD CACHEING
+  public int gcf() { // ADD CACHEING, CLEAN UP
     // Base cases:
     if (this.num == 0){
       return this.denom;
@@ -90,15 +89,30 @@ public class Fraction {
     if (this.denom == 0){
       return this.num;
     }
-    // Internally convert negatives to positives:
-    int num, denom; // Use local variations of member fields...
+
+    // Internally convert negatives to positives: // FIX TO WORK WITH "NEW WAY"
+    
+
+    int posNum, posDenom; // Use local variations of member fields...
     if (this.num < 0){
-      num = -this.num;
-    } else num = this.num;
-    denom = this.denom; // denom should not be negative (pre-condition)... 
+      posNum = -this.num;
+    } else posNum = this.num;
+    if (this.denom < 0){
+      posDenom = -this.denom;
+    } else posDenom = this.denom;
+
     // Recursive step:
-    int remainder = num % denom;
-    Fraction intermediate = new Fraction(denom, remainder); // CONDENSE
-    return (intermediate.gcf());
+    int remainder = posNum % posDenom;
+
+    //DEBUGGING//
+    //System.out.println("num="+this.num+" denom="+this.denom+" rem.="+remainder+" serialNo="+this.serialNo);
+
+    //OLD WAY: Create a new fraction and recursively call gcf on new instance (buggy):
+    //Fraction intermediate = new Fraction(posDenom, remainder); // CONDENSE
+    //NEW WAY: Intermediately undate -this- instance and call again... (no call to constructor,
+    // should eliminate bug):
+    this.num = this.denom; // Update values according to Euclid's Algorithm so that next recursive
+    this.denom = remainder; // call brings us closer to the solution...
+    return (this.gcf());
   }
 }
