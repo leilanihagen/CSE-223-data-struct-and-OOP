@@ -10,5 +10,8 @@ public class Main {
     Fraction test = new Fraction(24, -16);
     String str = test.toString();
     System.out.println(str);
+    Fraction addend = new Fraction(14, 20);
+    Fraction sum = test.add(addend);
+    System.out.println("Sum= "+sum);
   }
 } 

@@ -14,7 +14,7 @@ public class Fraction {
     this.serialNo = serialCounter++;
     this.num = num;
     this.denom = denom;
-    System.out.println("Fraction("+num+", "+denom+")="+this.serialNo);
+//    System.out.println("Fraction("+num+", "+denom+")="+this.serialNo);
     this.condition();
   }
 
@@ -32,16 +32,18 @@ public class Fraction {
     return this.denom;
   }
 
-  // Setters (needed? if so, condition):
+  // Setters:
   public void setNum(int num) {
     this.num = num;
+    this.condition();
   }
   public void setDenom(int denom) {
     this.denom = denom;
+    this.condition();
   }
 
   public String toString() {
-    if (this.undefined == true){
+    if (this.denom == 0){ // Flag
       return "NaN";
     }
     if (this.denom == 1){
@@ -50,17 +52,33 @@ public class Fraction {
     return (Integer.toString(this.num) + "/" + Integer.toString(this.denom));
   }
 
-//  public Fraction add(Fraction addend) {
-//  }
-//
-//  public Fraction sub(Fraction subtrahend) {
-//  }
-//
-//  public Fraction mul(Fraction multiplier) {
-//  }
-//
-//  public Fraction div(Fraction divisor) {
-//  }
+  public Fraction add(Fraction addend) {
+    if (this.denom == addend.denom){ // Already have common denominator.
+      return (new Fraction(this.num + addend.num, this.denom)); // Calling the constructor again
+    } // Else:                                                // ensures fraction gets reconditioned.
+    int thisScaledNum = this.num * addend.denom;
+    int addendScaledNum = addend.num * this.denom;
+    int commonDenom = this.denom * addend.denom;
+    return (new Fraction(thisScaledNum + addendScaledNum, commonDenom));
+  }
+
+  public Fraction sub(Fraction subtrahend) {
+    if (this.denom == subtrahend.denom){
+      return (new Fraction(this.num - addend.num, this.denom));
+    } // Else:
+    int thisScaledNum = this.num * addend.denom;
+    int subtrahendScaledNum = addend.num * this.denom;
+    int commonDenom = this.denom * subtrahend.denom;
+    return (new Fraction(thisScaledNum - subtrahendScaledNum, commonDenom));
+  }
+
+  public Fraction mul(Fraction multiplier) {
+    return (new Fraction(this.num * multiplier.num, this.denom * multiplier.denom));
+  }
+
+  public Fraction div(Fraction divisor) {
+    return (new Fraction(this.num * divisor.denom, this.denom * multiplier.num));
+  }
 
   public void condition() {
     // Flag divisions by 0 as undefined:
@@ -76,43 +94,60 @@ public class Fraction {
       this.denom = -this.denom;
     }
     // Reduce:
-    int gcf = gcf();
+    int gcf = gcf(this.num, this.denom);
     this.num = this.num/gcf;
     this.denom = this.denom/gcf;
   }
 
-  public int gcf() { // ADD CACHEING, CLEAN UP
+/** VERSION 1**/
+//  public int gcf() { // ADD CACHEING, CLEAN UP
+//    // Base cases:
+//    if (this.num == 0){
+//      return this.denom;
+//    }
+//    if (this.denom == 0){
+//      return this.num;
+//    }
+//
+//    // Internally convert negatives to positives: // FIX TO WORK WITH "NEW WAY"
+//    
+//
+//    int posNum, posDenom; // Use local variations of member fields...
+//    if (this.num < 0){
+//      posNum = -this.num;
+//    } else posNum = this.num;
+//    if (this.denom < 0){
+//      posDenom = -this.denom;
+//    } else posDenom = this.denom;
+//
+//    // Recursive step:
+//    int remainder = posNum % posDenom;
+//
+//    //DEBUGGING//
+//    //System.out.println("num="+this.num+" denom="+this.denom+" rem.="+remainder+" serialNo="+this.serialNo);
+//
+//    //OLD WAY: Create a new fraction and recursively call gcf on new instance (buggy):
+//    //Fraction intermediate = new Fraction(posDenom, remainder); // CONDENSE
+//    //NEW WAY: Intermediately undate -this- instance and call again... (no call to constructor,
+//    // should eliminate bug):
+//    this.num = this.denom; // Update values according to Euclid's Algorithm so that next recursive
+//    this.denom = remainder; // call brings us closer to the solution...
+//    return (this.gcf());
+//  }
+/** VERSION 2**/
+  private static int gcf(int a, int b) { // Gen. purpose gcf() method implementing Euclid's Algorithm. Static?
     // Base cases:
-    if (this.num == 0){
-      return this.denom;
+    if (a == 0){
+      return b;
     }
-    if (this.denom == 0){
-      return this.num;
+    if (b == 0){
+      return a;
     }
-
-    // Internally convert negatives to positives: // FIX TO WORK WITH "NEW WAY"
-    
-
-    int posNum, posDenom; // Use local variations of member fields...
-    if (this.num < 0){
-      posNum = -this.num;
-    } else posNum = this.num;
-    if (this.denom < 0){
-      posDenom = -this.denom;
-    } else posDenom = this.denom;
-
+    // Convert negative inputs to positives:
+    a = (a < 0)? -a:a;
+    b = (b < 0)? -b:b;
     // Recursive step:
-    int remainder = posNum % posDenom;
-
-    //DEBUGGING//
-    //System.out.println("num="+this.num+" denom="+this.denom+" rem.="+remainder+" serialNo="+this.serialNo);
-
-    //OLD WAY: Create a new fraction and recursively call gcf on new instance (buggy):
-    //Fraction intermediate = new Fraction(posDenom, remainder); // CONDENSE
-    //NEW WAY: Intermediately undate -this- instance and call again... (no call to constructor,
-    // should eliminate bug):
-    this.num = this.denom; // Update values according to Euclid's Algorithm so that next recursive
-    this.denom = remainder; // call brings us closer to the solution...
-    return (this.gcf());
+    int remainder = a % b;
+    return(gcf(b, remainder));
   }
 }
