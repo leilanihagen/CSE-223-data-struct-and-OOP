@@ -30,6 +30,7 @@ public class IntNode {
 	}
 	
 	// Getters/accessors:
+	@SuppressWarnings("null")
 	public IntNode getNext() {
 		return next;
 	}
