@@ -106,14 +106,21 @@ public class Fraction {
     /* Fraction "conditioning" method that reduces fractions to simplest form (eliminates common
        factors from the numerator and denominator) and reformats negative fractions. */
 
-    // Reduce 0/num to 0/1:
-    if (this.num == 0 && this.denom != 0){ // Do not modify denom. if it also ==0
-      this.denom = 1;
-    }
-    // Keep negative sign placement consistent:
+    // Keep negative sign placement consistent (placed before any conditinals with returns, to be
+    // done first):
     if (this.denom < 0){
       this.num = -this.num;
       this.denom = -this.denom;
+    }
+    // Force numerator to 1 in undefined fractions (num/0) and return (conditioning complete).
+    if (this.denom == 0){ // BUG FIX for exceptions caused by trying to reduce 0/0 (2018-04-21).
+      this.num = 1;
+      return; // Bug fix.
+    }
+    // Reduce 0/num to 0/1:
+    if (this.num == 0){ // Do not modify denom. if it also ==0
+      this.denom = 1;
+      return; // Bug fix.
     }
     // Reduce:
     int gcf = gcf(this.num, this.denom);
