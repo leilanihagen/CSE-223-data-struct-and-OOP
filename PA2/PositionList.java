@@ -1,38 +1,38 @@
 /**
- * An instance of PositionList creates a linked list of integers for keeping track of
- * the positions at which a given word of WordList occurs.
+ * An instance of PositionList creates a simple linked list of integers for keeping track of all
+ * the positions at which a given word of a WordList occurs.
  * @author Leilani Hagen
- * @version 1.0
- * @since Apr 27, 2018
+ * @date Apr 28, 2018
  *
  */
 public class PositionList {
 
-	private IntNode pl;
+	private IntNode pl; // PositionList head/root...
 	
 	PositionList() {
-		pl = new IntNode(); 
+		pl = new IntNode(0); // 0 as "empty node" flag (included for explicitness).
 	}
 	
-	@SuppressWarnings("null")
 	public void add(int data) {
 		/* Creates a new node with data value passed in arg, traverses the list
 		   for the last node, and links the new node to the last node. */
-		
-		IntNode plNext = new IntNode(data);
-		
-		if (pl.getData() == 0) { // No position will be positon 0, so using this as a flag for an
+
+		// Use head node for initial entry:
+		if (pl.getData() == 0) { // No position will be position 0, so using this as a flag for an
 			pl.setData(data);    // uninitialized PositionList...
 			return;
 		}
-		IntNode temp = pl;
-		while(temp.getNext() != null) { // Traverse for the end of the list.
-			temp = temp.getNext(); // Advance temp...
+		
+		// Create a new node for non-initial entries, then traverse for the end of the list:
+		IntNode plNext = new IntNode(data);
+		IntNode traverser = pl;
+		while(traverser.getNext() != null) {
+			traverser = traverser.getNext(); // Advance the traverser node...
 		}
-		temp.setNext(plNext); // "Dereference" temp and set it's object's next field to plNext (?)
+		traverser.setNext(plNext); // "Dereference" traverser and set it's object's next field to plNext.
 	}
 	
-	public IntNode getPl() { // FOR TESTING ONLY
+	public IntNode getPl() { // FOR TESTING ONLY, DELETE!
 		return pl;
 	}
 }

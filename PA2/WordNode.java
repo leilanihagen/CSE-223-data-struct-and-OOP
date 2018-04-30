@@ -4,8 +4,7 @@
  * reference to the next WordNode in the WordList.
  * 
  * @author Leilani Hagen
- * @version 1.0
- * @since Apr 27, 2018
+ * @date Apr 28, 2018
  *
  */
 public class WordNode {
@@ -17,12 +16,12 @@ public class WordNode {
 	
 	// Constructors:
 	WordNode() {
-		occurances = null;
+		occurances = new PositionList();
 		next = null;		
 	}
 	WordNode(String data) {
 		this.data = data;
-		occurances = null;
+		occurances = new PositionList();
 		next = null;
 	}
                                                                                            
@@ -30,8 +29,8 @@ public class WordNode {
 	public void setData(String data) {
 		this.data = data;
 	}
-	public void setOccurances(PositionList occurances) {
-		this.occurances = occurances;
+	public void setOccurances(PositionList occurances) { // ONLY USE for re-initializing the head
+		this.occurances = occurances;                    // /root of the PositionList.
 	}
 	public void setNext(WordNode next) {
 		this.next = next;
@@ -47,4 +46,10 @@ public class WordNode {
 	public WordNode getNext() {
 		return next;
 	}
+	
+	// WordNode wrapper for the PositionList.add() method:
+	public void appendOccurances(int occuranceNum) {
+		occurances.add(occuranceNum);
+	}
+
 }

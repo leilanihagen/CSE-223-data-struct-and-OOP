@@ -2,8 +2,7 @@
  * Linked list node class for integer data nodes.
  * 
  * @author Leilani Hagen
- * @version 1.0
- * @since Apr 25, 2018
+ * @date Apr 25, 2018
  *
  */
 public class IntNode {
@@ -30,7 +29,6 @@ public class IntNode {
 	}
 	
 	// Getters/accessors:
-	@SuppressWarnings("null")
 	public IntNode getNext() {
 		return next;
 	}
