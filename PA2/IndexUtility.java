@@ -25,9 +25,9 @@ public class IndexUtility {
 		
 		// Grab each word encountered and add it to wl with a unique position for every word:
 		int position = 0;
-		while(sc.hasNext()) {
+		while (sc.hasNext()) {
 			position++;
-			word = sc.next();
+			word = sc.next().toLowerCase();
 			wl.addWord(word, position);
 		} sc.close();
 		

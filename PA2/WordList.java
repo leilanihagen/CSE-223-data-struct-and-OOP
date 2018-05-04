@@ -1,4 +1,5 @@
 /**
+ * Implemented without sentinel node...
  * 
  * @author Leilani Hagen
  * @date May 3, 2018
@@ -70,6 +71,17 @@ public class WordList {
 			insertLoc.setNext(newWord);
 		}
 
+	}
+	
+	public void print() {
+		/* Traverse the WordList and print the value stored in each WordNode along with the entries
+		   in it's PositionList. */
+		
+		WordNode temp = wl;
+		while (temp != null) {
+			System.out.println(temp.getData() + temp.getOccurances().toString());
+			temp = temp.getNext();
+		}
 	}
 	
 	public WordNode getHead() { // FOR TESTING ONLY, DELETE

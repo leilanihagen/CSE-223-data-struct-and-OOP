@@ -10,47 +10,71 @@
  */
 public class WordNode {
 	
-	// Member fields:
 	private String data;
-	private PositionList occurances;
+	private PositionList occurrences;
 	private WordNode next;
 	
-	// Constructors:
 	WordNode() {
-		occurances = new PositionList();
+		/* No argument constructor. Initializes a new PositionList and sets next to null. */
+
+		occurrences = new PositionList();
 		next = null;		
 	}
 	WordNode(String data) {
+		/* Data-setting constructor. Initializes a new PositionList, sets next to null, and sets
+		   the string data to the data provided in the argument. */
+
 		this.data = data;
-		occurances = new PositionList();
+		occurrences = new PositionList();
 		next = null;
 	}
                                                                                            
-	// Setters/mutators:
 	public void setData(String data) {
+		/* data mutator. */
+
 		this.data = data;
 	}
-	public void setOccurances(PositionList occurances) { // ONLY USE for re-initializing the head
-		this.occurances = occurances;                    // /root of the PositionList.
+	public void setOccurances(PositionList occurrences) {
+		/* occurrences mutator. */
+
+		this.occurrences = occurrences;
 	}
 	public void setNext(WordNode next) {
+		/* next mutator. */
+
 		this.next = next;
 	}
 	
-	// Getters/accessors:
 	public String getData() {
+		/* data accessor. */
+
 		return data;
 	}
 	public PositionList getOccurances() {
-		return occurances;
+		/* occurrences accessor. */
+
+		return occurrences;
 	}
 	public WordNode getNext() {
+		/* next accessor. */
+
 		return next;
 	}
+
+	boolean hasNext() {
+		/* Boolean initialized checker for next. */
+
+		if (next != null) {
+			return true;
+		} else { 
+			return false;
+		}
+	}
 	
-	// WordNode wrapper for the PositionList.add() method:
 	public void appendOccurances(int occuranceNum) {
-		occurances.add(occuranceNum);
+		/* WordNode wrapper for the PositionList.add() method. */
+
+		occurrences.add(occuranceNum);
 	}
 
 }

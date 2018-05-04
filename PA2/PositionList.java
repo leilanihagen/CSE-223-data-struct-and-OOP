@@ -34,6 +34,18 @@ public class PositionList {
 		traverser.setNext(plNext); // "Dereference" traverser and set it's object's next field to plNext.
 	}
 	
+	public String toString() {
+		/* Returns a space-separated list of all entries in the PositionList. */
+		
+		String runningList = "";
+		IntNode traverser = pl;
+		while (traverser != null) {
+			runningList += " " + traverser.getData();
+			traverser = traverser.getNext();
+		}
+		return runningList;
+	}
+	
 	public IntNode getPl() { // FOR TESTING ONLY, DELETE!
 		return pl;
 	}
