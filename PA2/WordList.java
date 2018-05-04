@@ -14,6 +14,7 @@ public class WordList {
 		// Edge case for adding initial word to wl:
 		if (wl.getData() == null) { // Zero words in wl...
 			wl.setData(word);
+			wl.appendOccurances(position); // Does this fix the bug?
 			return;
 		}
 		
@@ -29,6 +30,7 @@ public class WordList {
 		} // No matching word found...
 		
 		// Traverse again, this time looking for the correct place to insert word:
+		traverser = wl; // Restart the traverser at the head of the list.
 		WordNode insertLoc = null;
 		int bestMatch = TRIPVAL; // Initialize to a ridiculously large number so that the first
 		while (traverser != null) { // word compare satisfies the condition on line 27.
@@ -38,8 +40,10 @@ public class WordList {
 			}
 			traverser = traverser.getNext();
 		} // insertLoc should now contain the address of the node to insert word near...
+		
+		// Insert the word:
 		WordNode newWord = new WordNode(word); // Make a new WordNode to store our word.
-		newWord.appendOccurances(position);
+		newWord.appendOccurances(position); // Append it's position (initialize the position list)
 		if (bestMatch < 0) { // compareTo() returned a negative value...
 			// Insert newWord AFTER insertLoc:
 			newWord.setNext(insertLoc.getNext());
@@ -60,6 +64,10 @@ public class WordList {
 			insertLoc.setNext(newWord);
 		}
 
+	}
+	
+	public WordNode getHead() { // FOR TESTING ONLY, DELETE
+		return wl;
 	}
 
 }
