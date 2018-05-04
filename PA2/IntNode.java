@@ -3,6 +3,7 @@
  * 
  * @author Leilani Hagen
  * @date Apr 25, 2018
+ * @assignment PA2 - CSE223
  *
  */
 public class IntNode {

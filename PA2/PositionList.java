@@ -1,8 +1,10 @@
 /**
  * An instance of PositionList creates a simple linked list of integers for keeping track of all
  * the positions at which a given word of a WordList occurs.
+ * 
  * @author Leilani Hagen
  * @date Apr 28, 2018
+ * @assignment PA2 - CSE223
  *
  */
 public class PositionList {

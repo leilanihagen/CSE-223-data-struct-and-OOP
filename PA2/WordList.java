@@ -1,4 +1,10 @@
-// DOES NOT FORCE LOWERCASE
+/**
+ * 
+ * @author Leilani Hagen
+ * @date May 3, 2018
+ * @assignment PA2 - CSE223
+ *
+ */
 public class WordList {
 	
 	private WordNode wl;

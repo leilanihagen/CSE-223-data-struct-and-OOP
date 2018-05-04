@@ -5,6 +5,7 @@
  * 
  * @author Leilani Hagen
  * @date Apr 28, 2018
+ * @assignment PA2 - CSE223
  *
  */
 public class WordNode {
