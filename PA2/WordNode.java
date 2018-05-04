@@ -15,10 +15,12 @@ public class WordNode {
 	private WordNode next;
 	
 	WordNode() {
-		/* No argument constructor. Initializes a new PositionList and sets next to null. */
+		/* No argument constructor. Initializes a new PositionList and sets next and data to null.
+		   */
 
+		data = null;
 		occurrences = new PositionList();
-		next = null;		
+		next = null;
 	}
 	WordNode(String data) {
 		/* Data-setting constructor. Initializes a new PositionList, sets next to null, and sets

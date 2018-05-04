@@ -9,25 +9,27 @@
  */
 public class PositionList {
 
-	private IntNode pl; // PositionList head/root...
+	private IntNode handle;
 	
 	PositionList() {
-		pl = new IntNode(0); // 0 as "empty node" flag (included for explicitness).
+		handle = new IntNode(0); // 0 as "empty node" flag (included for explicitness).
 	}
 	
 	public void add(int data) {
-		/* Creates a new node with data value passed in arg, traverses the list
-		   for the last node, and links the new node to the last node. */
+		/* Creates a new node with data value passed in arg, traverses the list for the last node,
+		   and links the new node to the last node. If the list handle does not contain a position
+		   value, it's data will simply be initialized to the first position being added to the
+		   given list. */
 
-		// Use head node for initial entry:
-		if (pl.getData() == 0) { // No position will be position 0, so using this as a flag for an
-			pl.setData(data);    // uninitialized PositionList...
+		// Use handle node for initial entry:
+		if (handle.getData() == 0) { // No position will be position 0, so using this as a flag for an
+			handle.setData(data);    // uninitialized PositionList...
 			return;
 		}
 		
 		// Create a new node for non-initial entries, then traverse for the end of the list:
 		IntNode plNext = new IntNode(data);
-		IntNode traverser = pl;
+		IntNode traverser = handle;
 		while(traverser.getNext() != null) {
 			traverser = traverser.getNext(); // Advance the traverser node...
 		}
@@ -38,15 +40,12 @@ public class PositionList {
 		/* Returns a space-separated list of all entries in the PositionList. */
 		
 		String runningList = "";
-		IntNode traverser = pl;
+		IntNode traverser = handle;
 		while (traverser != null) {
 			runningList += " " + traverser.getData();
 			traverser = traverser.getNext();
 		}
 		return runningList;
 	}
-	
-	public IntNode getPl() { // FOR TESTING ONLY, DELETE!
-		return pl;
-	}
+
 }

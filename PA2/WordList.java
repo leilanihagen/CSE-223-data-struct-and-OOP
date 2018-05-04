@@ -1,5 +1,17 @@
 /**
- * Implemented without sentinel node...
+ * WordList creates an initial WordNode upon construction, which will later be initialized upon the
+ * first add (there are no sentinel nodes).
+ * 
+ * .addWord(word, position) will do one of two things, in general: (1) if the word being added is
+ * already in the list, it will locate this word by doing a traversal and data comparison on all
+ * existing nodes, then append the position of the word being added to the PositionList associated
+ * with the existing entry for this word; OR (2) if the word is not located in the list, a second
+ * traversal of the WordList will be performed, searching for the word in WordList that is as
+ * lexicographically similar to the new word, then it either insert the new word before or after
+ * it's best found match.
+ * 
+ * .print() traverses the (sorted) WordList and prints the data at each node, along with a sorted
+ * ascending list of all the positions at which this word occurs in the input.
  * 
  * @author Leilani Hagen
  * @date May 3, 2018
@@ -8,25 +20,27 @@
  */
 public class WordList {
 	
-	private WordNode wl;
+	private WordNode handle;
 	
 	private static int TRIPVAL = 1000;
 	
 	WordList() {
-		wl = new WordNode();
+		handle = new WordNode();
 	}
 	
 	public void addWord(String word, int position) {
+		/* Locate an exact match in the WordList of word and append to it's PositionList, or insert
+		   word if it is new into the list in the correct location to maintain sorted order. */ 
 
-		// Edge case for adding initial word to wl:
-		if (wl.getData() == null) { // Zero words in wl...
-			wl.setData(word);
-			wl.appendOccurances(position); // Does this fix the bug?
+		// Edge case for adding initial word to list:
+		if (handle.getData() == null) { // Zero words in list...
+			handle.setData(word);
+			handle.appendOccurances(position);
 			return;
 		}
 		
 		// Traverse the WordList comparing String data, looking for a matching word:
-		WordNode traverser = wl;
+		WordNode traverser = handle;
 		while (traverser != null) {
 			if ((traverser.getData()).equals(word)) {
 				// Found match! Now append position to the PositionList associated with this word:
@@ -37,38 +51,38 @@ public class WordList {
 		} // No matching word found...
 		
 		// Traverse again, this time looking for the correct place to insert word:
-		traverser = wl; // Restart the traverser at the head of the list.
-		WordNode insertLoc = null;
-		int bestMatch = TRIPVAL; // Initialize to a ridiculously large number so that the first
-		while (traverser != null) { // word compare satisfies the condition on line 27.
-			if (Math.abs((traverser.getData()).compareTo(word)) < Math.abs(bestMatch)) {
-				bestMatch = (traverser.getData()).compareTo(word);
-				insertLoc = traverser; // Save the address of the current best-matched node...
+		traverser = handle; // Restart the traverser at the head of the list.
+		WordNode candidate = null;
+		int smallestDiff = TRIPVAL; // Initialize to a ridiculously large number so that the first
+		while (traverser != null) { // word compare satisfies the condition on line 58.
+			if (Math.abs((traverser.getData()).compareTo(word)) < Math.abs(smallestDiff)) {
+				smallestDiff = (traverser.getData()).compareTo(word);
+				candidate = traverser; // Save the address of the current best-matched node...
 			}
 			traverser = traverser.getNext();
-		} // insertLoc should now contain the address of the node to insert word near...
+		} WordNode best = candidate; // Best has now been selected...
 		
 		// Insert the word:
-		WordNode newWord = new WordNode(word); // Make a new WordNode to store our word.
-		newWord.appendOccurances(position); // Append it's position (initialize the position list)
-		if (bestMatch < 0) { // compareTo() returned a negative value...
-			// Insert newWord AFTER insertLoc:
-			newWord.setNext(insertLoc.getNext());
-			insertLoc.setNext(newWord);
+		WordNode newNode = new WordNode(word); // Make a new WordNode to store our word.
+		newNode.appendOccurances(position); // Append it's position (initialize the position list)
+		if (smallestDiff < 0) { // compareTo() returned a negative value...
+			// Insert newNode AFTER best:
+			newNode.setNext(best.getNext());
+			best.setNext(newNode);
 		}
-		else if (bestMatch > 0) { // compareTo() returned a positive value...
-			// Insert newWord BEFORE insertLoc:
+		else if (smallestDiff > 0) { // compareTo() returned a positive value...
+			// Insert newNode BEFORE best:
 			
-			// Edge-case for replacing the root:
-			if (insertLoc.equals(wl)) {
-				newWord.setNext(wl); // Link root to newWord (which will become the new root...)
-				wl = newWord; // Re-assign the root to be newWord.
+			// Edge-case for replacing the handle:
+			if (best.equals(handle)) {
+				newNode.setNext(handle); // Link handle to newNode...
+				handle = newNode; // Re-assign the handle to be newNode.
 				return;
 			}
 			
 			// General case:
-			newWord.setNext(insertLoc.getNext()); // Link newWord to insertLoc's next.
-			insertLoc.setNext(newWord);
+			newNode.setNext(best.getNext()); // Link newNode to best's next.
+			best.setNext(newNode);
 		}
 
 	}
@@ -77,15 +91,11 @@ public class WordList {
 		/* Traverse the WordList and print the value stored in each WordNode along with the entries
 		   in it's PositionList. */
 		
-		WordNode temp = wl;
-		while (temp != null) {
-			System.out.println(temp.getData() + temp.getOccurances().toString());
-			temp = temp.getNext();
+		WordNode traverser = handle;
+		while (traverser != null) {
+			System.out.println(traverser.getData() + traverser.getOccurances().toString());
+			traverser = traverser.getNext();
 		}
-	}
-	
-	public WordNode getHead() { // FOR TESTING ONLY, DELETE
-		return wl;
 	}
 
 }

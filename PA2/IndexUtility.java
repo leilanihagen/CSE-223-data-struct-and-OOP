@@ -16,6 +16,8 @@ public class IndexUtility {
 	}
 	
 	public WordList buildIndex() {
+		/* Scans System.in for tokens until none left and passes scanned tokens to
+		   WordList.addWord() with the token and it's position as grabbed from the input stream. */
 		
 		WordList wl = new WordList();
 		
@@ -30,7 +32,7 @@ public class IndexUtility {
 			word = sc.next().toLowerCase();
 			wl.addWord(word, position);
 		} sc.close();
-		
+
 		return wl;
 	}
 }

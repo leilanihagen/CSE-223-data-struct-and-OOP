@@ -8,33 +8,41 @@
  */
 public class IntNode {
 	
-	// Member fields:
 	private int data;
 	private IntNode next;
 	
-	// Constructors:
 	IntNode() {
+		/* No argument constructor. */
+
 		next = null;
 	}
 	IntNode(int data) {
+		/* Data-setting constructor. */
+
 		this.data = data;
 		next = null;
 	}
 
-	// Setters/mutators:
-	public void setNext(IntNode next) {
-		this.next = next;
-	}
 	public void setData(int data) {
+		/* data mutator. */		
+
 		this.data = data;
 	}
-	
-	// Getters/accessors:
-	public IntNode getNext() {
-		return next;
+	public void setNext(IntNode next) {
+		/* next mutator. */
+		
+		this.next = next;
 	}
+	
 	public int getData() {
+		/* data accessor. */
+
 		return data;
+	}
+	public IntNode getNext() {
+		/* next accessor. */
+		
+		return next;
 	}
 
 }
