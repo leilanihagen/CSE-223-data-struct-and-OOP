@@ -22,8 +22,6 @@ public class WordList {
 	
 	private WordNode handle;
 	
-	private static int TRIPVAL = 1000;
-	
 	WordList() {
 		handle = new WordNode();
 	}
@@ -40,50 +38,45 @@ public class WordList {
 		}
 		
 		// Traverse the WordList comparing String data, looking for a matching word:
-		WordNode traverser = handle;
-		while (traverser != null) {
-			if ((traverser.getData()).equals(word)) {
+		WordNode temp = handle;
+		WordNode prev = temp; // init
+		while (temp != null) {
+
+			if ((temp.getData()).compareTo(word) == 0) {
 				// Found match! Now append position to the PositionList associated with this word:
-				traverser.appendOccurances(position);
+				temp.appendOccurances(position);
 				return;
 			}
-			traverser = traverser.getNext();
-		} // No matching word found...
-		
-		// Traverse again, this time looking for the correct place to insert word:
-		traverser = handle; // Restart the traverser at the head of the list.
-		WordNode candidate = null;
-		int smallestDiff = TRIPVAL; // Initialize to a ridiculously large number so that the first
-		while (traverser != null) { // word compare satisfies the condition on line 58.
-			if (Math.abs((traverser.getData()).compareTo(word)) < Math.abs(smallestDiff)) {
-				smallestDiff = (traverser.getData()).compareTo(word);
-				candidate = traverser; // Save the address of the current best-matched node...
-			}
-			traverser = traverser.getNext();
-		} WordNode best = candidate; // Best has now been selected...
-		
-		// Insert the word:
-		WordNode newNode = new WordNode(word); // Make a new WordNode to store our word.
-		newNode.appendOccurances(position); // Append it's position (initialize the position list)
-		if (smallestDiff < 0) { // compareTo() returned a negative value...
-			// Insert newNode AFTER best:
-			newNode.setNext(best.getNext());
-			best.setNext(newNode);
-		}
-		else if (smallestDiff > 0) { // compareTo() returned a positive value...
-			// Insert newNode BEFORE best:
-			
-			// Edge-case for replacing the handle:
-			if (best.equals(handle)) {
-				newNode.setNext(handle); // Link handle to newNode...
-				handle = newNode; // Re-assign the handle to be newNode.
+
+			if (word.compareTo(temp.getData()) < 0) {
+				WordNode newNode = new WordNode(word); // Make a new WordNode to store our word.
+				newNode.appendOccurances(position);
+				
+				// Edge case for replacing the handle:		// Necessary???
+				if (temp.equals(handle)) {
+					newNode.setNext(handle);
+					handle = newNode;
+				}
+				else {
+
+					// Insert newNode between prev (node preceding traverser) and traverser:
+//					newNode.setNext(traverser.getNext());
+//					traverser.setNext(newNode);
+					prev.setNext(newNode);
+					newNode.setNext(temp);
+				}
 				return;
 			}
 			
-			// General case:
-			newNode.setNext(best.getNext()); // Link newNode to best's next.
-			best.setNext(newNode);
+			// else:
+			// Keep looping:
+			prev = temp; // Keep track of prev for inserting before traverser...
+			temp = temp.getNext();
 		}
+		// If insert location not found within the list:
+		WordNode newNode = new WordNode(word);
+		newNode.appendOccurances(position);
+		prev.setNext(newNode);
 
 	}
 	

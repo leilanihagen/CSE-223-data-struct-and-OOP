@@ -30,7 +30,7 @@ public class PositionList {
 		// Create a new node for non-initial entries, then traverse for the end of the list:
 		IntNode plNext = new IntNode(data);
 		IntNode traverser = handle;
-		while(traverser.getNext() != null) {
+		while (traverser.getNext() != null) {
 			traverser = traverser.getNext(); // Advance the traverser node...
 		}
 		traverser.setNext(plNext); // "Dereference" traverser and set it's object's next field to plNext.
