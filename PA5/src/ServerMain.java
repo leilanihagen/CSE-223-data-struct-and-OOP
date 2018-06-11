@@ -4,20 +4,37 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Server chat application!
+ *
+ * @author Leilani Hagen
+ * @date 2018-06-10
+ * @assignment PA5 - CSE223
+ */
 public class ServerMain {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+
+        boolean firstClient = true;
 
         greetUser();
         String username = getUsername();
 
-//        while (true) {
-            // Create the server socket:
-            ServerSocket ss = null;
-            try {
-                ss = new ServerSocket(1_201);
-            } catch (IOException e) {
-                e.printStackTrace();
+        // Create the server socket:
+        ServerSocket ss = null;
+        try {
+            ss = new ServerSocket(1_201);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        while (true) {
+
+            // Display reconnection dialog to subsequent client requests after the first client has left:
+            if (firstClient){
+                firstClient = false;
+            } else {
+
             }
 
             // Wait for a connection from client:
@@ -57,17 +74,25 @@ public class ServerMain {
             Scanner input = new Scanner(System.in);
 
             // Create our Runnables:
-            SReceiver receiver = new SReceiver(socket, clientUsername);
             SSender sender = new SSender(socket, input);
+            SReceiver receiver = new SReceiver(socket, clientUsername);
 
             // Thread our Sender and Receiver objects:
-            Thread rThread = new Thread(receiver);
             Thread sThread = new Thread(sender);
+            Thread rThread = new Thread(receiver);
 
             // Start the threads:
-            rThread.start();
             sThread.start();
-//        }
+            rThread.start();
+
+            while (sThread.isAlive() || rThread.isAlive()){
+                try {
+                Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private static void greetUser() {

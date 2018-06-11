@@ -15,7 +15,7 @@ public class SSender implements Runnable {
     private Socket socket;
     private Scanner input;
 
-    public SSender(Socket socket, Scanner scanner){
+    public SSender(Socket socket, Scanner scanner) {
         /*
         Mandatory constructor.
          */

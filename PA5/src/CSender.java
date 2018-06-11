@@ -46,6 +46,7 @@ public class CSender implements Runnable {
             String checkExit = lastMessage.substring(0, 2);
             if (checkExit.equals("x!")){
                 toServer.println("EXIT_MESSAGE_FLAG");
+                toServer.flush();
                 break;
             } // else:
             // Send last line to the server:
@@ -54,5 +55,4 @@ public class CSender implements Runnable {
         }
         toServer.close();
     }
-
 }

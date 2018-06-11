@@ -40,6 +40,8 @@ public class SReceiver implements Runnable {
             // Specialized exit-message:
             if (clientMessage.equals("EXIT_MESSAGE_FLAG")) {
                 System.out.println(clientUsername + " left the chat. Goodbye!");
+                System.out.println();
+                break;
             } else {
                 // Send the received message to stdout:
                 System.out.println(clientUsername + ": <" + clientMessage + ">");

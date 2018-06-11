@@ -3,6 +3,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Client chat application!
+ *
+ * @date 2018-06-10
+ * @author Leilani Hagen
+ * @assignment PA5 - CSE223
+ */
 public class ClientMain {
 
     public static void main(String args[]){
